@@ -11,14 +11,14 @@ import javax.servlet.Servlet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServletServer {
+public class ServletServer implements Runnable {
     private final Server server;
-    private static final Map<String, Servlet> pathes = new HashMap<>();
+    private static final Map<String, Servlet> SERVLETS = new HashMap<>();
 
     static {
-        pathes.put("/add-product", new AddProductServlet());
-        pathes.put("/get-products", new GetProductsServlet());
-        pathes.put("/query", new QueryServlet());
+        SERVLETS.put("/add-product", new AddProductServlet());
+        SERVLETS.put("/get-products", new GetProductsServlet());
+        SERVLETS.put("/query", new QueryServlet());
     }
 
     public ServletServer(int port) {
@@ -28,12 +28,12 @@ public class ServletServer {
         context.setContextPath("/");
         server.setHandler(context);
 
-        for (Map.Entry<String, Servlet> entry : pathes.entrySet()) {
+        for (Map.Entry<String, Servlet> entry : SERVLETS.entrySet()) {
             context.addServlet(new ServletHolder(entry.getValue()), entry.getKey());
         }
     }
 
-    public void start() {
+    public void run() {
         try {
             server.start();
             server.join();
@@ -46,7 +46,7 @@ public class ServletServer {
     public void stop() {
         try {
             server.stop();
-            System.out.println("Server stoped");
+            System.out.println("Server stopped");
         } catch (Exception e) {
             System.err.println("Can't stop server. Cause: " + e.getMessage());
         }

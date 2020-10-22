@@ -28,6 +28,6 @@ public class Main {
         }
 
         ServletServer server = new ServletServer(8081);
-        server.start();
+        server.run();
     }
 }

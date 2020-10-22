@@ -1,8 +1,7 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.akirakozov.sd.refactoring.ServletServer;
 
@@ -10,26 +9,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GetProductsServletTest {
 
-    ServletServer server;
-    @Before
+
+    Thread serverThread = new Thread(new ServletServer(8081));
+    @BeforeEach
     public void prepare() {
-        server = new ServletServer(8081);
-        server.start();
+        serverThread.start();
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            System.err.println("Can't sleep. Cause: " + e.getMessage());
+        }
     }
 
-    @After
+    @AfterEach
     public void finish() {
-        server.stop();
+        serverThread.interrupt();
     }
 
     @Test
-    public void testAdd() {
+    public void testSet() {
 
     }
 
     @Test
     public void testGet() {
-
+        String response = Utils.getResponse(Utils.sendRequest("http://localhost:8081/get-products"));
+        System.out.println(response);
     }
 
     @Test
