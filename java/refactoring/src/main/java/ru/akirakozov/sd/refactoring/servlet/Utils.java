@@ -1,4 +1,5 @@
 package ru.akirakozov.sd.refactoring.servlet;
+import ru.akirakozov.sd.refactoring.SqlResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,5 +29,11 @@ public class Utils {
             System.err.println("Can't send request. Cause: " + e.getMessage());
         }
         return stream;
+    }
+
+    public static String generateHtml(SqlResult result) {
+        return "<html><body>\n" +
+                result.data() +
+                "</body></html>";
     }
 }

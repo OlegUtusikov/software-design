@@ -14,6 +14,7 @@ import java.util.Map;
 public class ServletServer implements Runnable {
     private final Server server;
     private static final Map<String, Servlet> SERVLETS = new HashMap<>();
+    private final DataBase dataBase = new DataBase();
 
     static {
         SERVLETS.put("/add-product", new AddProductServlet());
@@ -50,5 +51,17 @@ public class ServletServer implements Runnable {
         } catch (Exception e) {
             System.err.println("Can't stop server. Cause: " + e.getMessage());
         }
+    }
+
+    public void clearDataBase() {
+        dataBase.executeUpdateSql("DROP TABLE IF EXISTS PRODUCT");
+    }
+
+    public void initDataBase() {
+        dataBase.executeUpdateSql(
+                "CREATE TABLE IF NOT EXISTS PRODUCT" +
+                        "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        " NAME           TEXT    NOT NULL, " +
+                        " PRICE          INT     NOT NULL)");
     }
 }
