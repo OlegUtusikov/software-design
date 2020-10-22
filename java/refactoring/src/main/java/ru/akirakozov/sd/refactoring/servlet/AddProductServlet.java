@@ -17,7 +17,6 @@ public class AddProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("name");
         long price = Long.parseLong(request.getParameter("price"));
-        System.out.println("Add " + name + " " + price);
         dataBase.executeUpdateSql("INSERT INTO PRODUCT " + "(NAME, PRICE) VALUES (\"" + name + "\"," + price + ")");
 
         response.setContentType("text/html");
